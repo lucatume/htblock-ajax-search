@@ -7,12 +7,11 @@ module.exports = function(grunt) {
             options: {
                 stripBanners: true
             },
-            { %= js_safe_name %
-            }: {
+            main: {
                 src: [
-                    'assets/js/src/headway_block_ajax_search.js'
+                    'assets/js/src/ajax_search.js'
                 ],
-                dest: 'assets/js/headway_block_ajax_search.js'
+                dest: 'assets/js/ajax_search.js'
             }
         },
         jshint: {
@@ -41,68 +40,41 @@ module.exports = function(grunt) {
         uglify: {
             all: {
                 files: {
-                    'assets/js/headway_block_ajax_search.min.js': ['assets/js/headway_block_ajax_search.js']
+                    'assets/js/ajax_search.min.js': ['assets/js/ajax_search.js']
                 },
                 options: {
                     mangle: {
                         except: ['jQuery']
                     },
-                    sourceMap: true
+                    preserveComments: 'some'
                 }
             }
         },
         test: {
             files: ['assets/js/test/**/*.js']
         },
-        { %
-            if ('sass' === css_type) { %
-            }
-            sass: {
-                all: {
-                    options: {
-                        sourcemap: true
-                    },
-                    files: {
-                        'assets/css/headway_block_ajax_search.css': 'assets/css/sass/headway_block_ajax_search.scss'
-                    }
+
+        sass: {
+            all: {
+                files: {
+                    'assets/css/ajax_search.css': 'assets/css/sass/ajax_search.scss'
                 }
-            },
-            { %
-            } else if ('less' === css_type) { %
             }
-            less: {
-                all: {
-                    files: {
-                        'assets/css/headway_block_ajax_search.css': 'assets/css/less/headway_block_ajax_search.less'
-                    }
-                }
-            },
-            { %
-            } %
-        }
+        },
+
         cssmin: {
             options: {
                 banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
                     ' * <%= pkg.homepage %>\n' +
                     ' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-                    ' * Licensed GPLv2+' +
-                    ' */\n'
+                    ' * Licensed GPLv2+' + ' */\n'
             },
             minify: {
                 expand: true,
-                { %
-                    if ('sass' === css_type || 'less' === css_type) { %
-                    }
-                    cwd: 'assets/css/',
-                    src: ['headway_block_ajax_search.css'],
-                    { %
-                    } else { %
-                    }
-                    cwd: 'assets/css/src/',
-                    src: ['headway_block_ajax_search.css'],
-                    { %
-                    } %
-                }
+
+                cwd: 'assets/css/',
+                src: ['ajax_search.css'],
+
                 dest: 'assets/css/',
                 ext: '.min.css'
             }
@@ -112,44 +84,20 @@ module.exports = function(grunt) {
                 options: {
                     browsers: ['last 2 versions']
                 },
-                src: 'assets/css/headway_block_ajax_search.css',
-                dest: 'assets/css/headway_block_ajax_search.css'
+                src: 'assets/css/ajax_search.css',
+                dest: 'assets/css/ajax_search.css'
             }
         },
         watch: {
-            { %
-                if ('sass' === css_type) { %
+
+            sass: {
+                files: ['assets/css/sass/*.scss'],
+                tasks: ['sass', 'autoprefixer:all', 'cssmin'],
+                options: {
+                    debounceDelay: 500
                 }
-                sass: {
-                    files: ['assets/css/sass/*.scss'],
-                    tasks: ['sass', 'autoprefixer:all', 'cssmin'],
-                    options: {
-                        debounceDelay: 500
-                    }
-                },
-                { %
-                } else if ('less' === css_type) { %
-                }
-                less: {
-                    files: ['assets/css/less/*.less'],
-                    tasks: ['sass', 'autoprefixer:all', 'cssmin'],
-                    options: {
-                        debounceDelay: 500
-                    }
-                },
-                { %
-                } else { %
-                }
-                styles: {
-                    files: ['assets/css/src/*.css'],
-                    tasks: ['autoprefixer:all', 'cssmin'],
-                    options: {
-                        debounceDelay: 500
-                    }
-                },
-                { %
-                } %
-            }
+            },
+
             scripts: {
                 files: ['assets/js/src/**/*.js', 'assets/js/vendor/**/*.js'],
                 tasks: ['jshint', 'concat', 'uglify'],
@@ -185,12 +133,12 @@ module.exports = function(grunt) {
             main: {
                 options: {
                     mode: 'zip',
-                    archive: './release/headway_block_ajax_search.<%= pkg.version %>.zip'
+                    archive: './release/ajax_search.<%= pkg.version %>.zip'
                 },
                 expand: true,
                 cwd: 'release/<%= pkg.version %>/',
                 src: ['**/*'],
-                dest: 'headway_block_ajax_search/'
+                dest: 'ajax_search/'
             }
         }
     });
@@ -199,15 +147,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin'); { %
-        if ('sass' === css_type) { %
-        }
-        grunt.loadNpmTasks('grunt-contrib-sass'); { %
-        } else if ('less' === css_type) { %
-        }
-        grunt.loadNpmTasks('grunt-contrib-less'); { %
-        } %
-    }
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -215,19 +156,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-autoprefixer');
 
     // Default task.
-    { %
-        if ('sass' === css_type) { %
-        }
-        grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin']); { %
-        } else if ('less' === css_type) { %
-        }
-        grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'autoprefixer', 'cssmin']); { %
-        } else { %
-        }
-        grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'autoprefixer', 'cssmin']); { %
-        } %
-    }
 
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin']);
     grunt.registerTask('build', ['default', 'clean', 'copy', 'compress']);
 
     grunt.util.linefeed = '\n';
