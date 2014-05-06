@@ -3,6 +3,8 @@ namespace ajaxsearch;
 
 use tad\wrappers\headway\BlockSettings as Settings;
 use tad\wrappers\ThemeSupport;
+use tad\utils\Script;
+use tad\utils\JsObject;
 
 class Block extends \HeadwayBlockAPI {
 
