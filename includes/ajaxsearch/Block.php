@@ -23,10 +23,24 @@ class Block extends \HeadwayBlockAPI {
     }
 
 
-    // public static function enqueue_action($block_id, $block, $original_block = null)
-    // {
-
-    // }
+    public static function enqueue_action($block_id, $block, $original_block = null)
+    {
+        $handle = 'ajaxSearch';
+        $src = Script::suffix(AJAXSEARCH_BLOCK_URL . 'assets/js/ajax_search.js');
+        $deps = array('jquery-ajaxifySubmit');
+        wp_enqueue_script($handle, $src, $deps);
+        // retrieve this block settings
+        if ($original_block) {
+            $block = $original_block;
+        }
+        // print the options object to the page
+        $settings = new Settings($block);
+        if (!$settings->data) {
+            return;
+        }
+        $objectName = 'ajaxSearchOptions' . $block_id;
+        JsObject::on($settings->data)->localize($handle, $objectName);
+    }
 
 
     // public static function dynamic_css($block_id, $block, $original_block = null)
