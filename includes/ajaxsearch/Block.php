@@ -1,6 +1,8 @@
 <?php
 namespace ajaxsearch;
 
+use tad\wrappers\ThemeSupport;
+
 class Block extends \HeadwayBlockAPI {
 
     public $id = 'ajaxsearch';
