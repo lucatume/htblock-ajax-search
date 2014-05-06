@@ -5,7 +5,7 @@ namespace ajaxsearch;
 
   public $tabs = array(
         'ajax-settings' => 'AJAX Settings',
-        'style-settings' => 'Styling'
+        'markup-settings' => 'Markup Settings'
         );
 
     public $inputs = array(
@@ -185,12 +185,14 @@ namespace ajaxsearch;
                 'default' => 'function($context, $contentArea, oldContent){}'
                 ),
             ),
-        'style-settings' => array(
-            'queue_default_style' => array(
+        'markup-settings' => array(
+
+            'enable_html5' => array(
                 'type' => 'checkbox',
-                'name' => 'queue_default_style',
-                'label' => 'Use default menu style',
-                'default' => 'true'
+                'name' => 'enable_html5',
+                'label' => 'HTML5 search form',
+                'default' => 'true',
+                'tooltip' => 'Output built-in HTML5 search form in place of standard HTML4 output',
                 )
             )
 );

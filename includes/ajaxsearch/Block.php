@@ -1,6 +1,7 @@
 <?php
 namespace ajaxsearch;
 
+use tad\wrappers\headway\BlockSettings as Settings;
 use tad\wrappers\ThemeSupport;
 
 class Block extends \HeadwayBlockAPI {
@@ -10,10 +11,14 @@ class Block extends \HeadwayBlockAPI {
     public $options_class = '\ajaxsearch\BlockOptions';
     public $description = 'AJAX-powered Headway themes search block.';
 
-    // public static function init_action($block_id, $block) 
-    // {
-
-    // }
+    public static function init_action($block_id, $block) 
+    {
+        // maybe add HTML5 search form support
+        $enable5 = Settings::on($block)->enableHtml5;
+        if ($enable5) {
+            ThemeSupport::addSupport('html5', array('search-form'));
+        }
+    }
 
 
     // public static function enqueue_action($block_id, $block, $original_block = null)
@@ -48,6 +53,11 @@ class Block extends \HeadwayBlockAPI {
     // }
 
     public function content($block) {
-        /* CODE HERE */
+        // deactivate Headway Widget filter to avoid
+        // inline JS events
+        remove_filter('get_search_form', array('HeadwayWidgets', 'search_form'), 10);
+        get_search_form();
+        // restore the filter after that
+        add_filter('get_search_form', array('HeadwayWidgets', 'search_form'), 10);
     }
 }
