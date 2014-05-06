@@ -74,15 +74,17 @@ class Block extends \HeadwayBlockAPI {
         remove_filter('get_search_form', array('HeadwayWidgets', 'search_form'), 10);
         // add a filter to append a custom data to this specific search form
         $id = $block['id'];
-        add_filter('get_search_form', function($form) use($id) {
+        $f = function($form) use($id) {
             if(!$id) {
                 return;
             }
             $rep = sprintf('$1 data-block-id="%d"', $id);
             return preg_replace("/(<form)/uis", $rep, $form);
-        });
+        };
+        add_filter('get_search_form', $f);
         get_search_form();
         // restore the filter after that
+        remove_filter( 'get_search_form', $f );
         add_filter('get_search_form', array('HeadwayWidgets', 'search_form'), 10);
     }
 }
