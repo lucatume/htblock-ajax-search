@@ -78,7 +78,7 @@ class Block extends \HeadwayBlockAPI {
             if(!$id) {
                 return;
             }
-            $rep = sprintf('$1 data-blockId="%d"', $id);
+            $rep = sprintf('$1 data-block-id="%d"', $id);
             return preg_replace("/(<form)/uis", $rep, $form);
         });
         get_search_form();
