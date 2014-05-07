@@ -86,8 +86,7 @@ class Block extends \HeadwayBlockAPI {
         // the function will set the labels, submit texts, and placeholder
         $settings= Settings::on($block);
         $g = function($form) use($settings){
-            $html = new SimpleHtmlDom();
-            $html->load($form);
+            $html = SimpleHtmlDom::on($form);
             if ($settings->labelText) {
                 $var = $html->find('label', 0)->innertext = $settings->labelText;
             }
