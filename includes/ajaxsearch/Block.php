@@ -5,6 +5,7 @@ use tad\wrappers\headway\BlockSettings as Settings;
 use tad\wrappers\ThemeSupport;
 use tad\utils\Script;
 use tad\utils\JsObject;
+use chen\SimpleHtmlDom;
 
 class Block extends \HeadwayBlockAPI {
 
@@ -81,10 +82,29 @@ class Block extends \HeadwayBlockAPI {
             $rep = sprintf('$1 data-block-id="%d"', $id);
             return preg_replace("/(<form)/uis", $rep, $form);
         };
+
+        // the function will set the labels, submit texts, and placeholder
+        $settings= Settings::on($block);
+        $g = function($form) use($settings){
+            $html = new SimpleHtmlDom();
+            $html->load($form);
+            if ($settings->labelText) {
+                $var = $html->find('label', 0)->innertext = $settings->labelText;
+            }
+            if ($settings->placeholderText) {
+                $var = $html->find('input[type="text"]', 0)->placeholder = $settings->placeholderText;
+            }
+            if ($settings->submitText) {
+                $var = $html->find('input[type="submit"]', 0)->value = $settings->submitText;
+            }
+            return $html->save();
+        };
         add_filter('get_search_form', $f);
+        add_filter('get_search_form', $g);
         get_search_form();
         // restore the filter after that
         remove_filter( 'get_search_form', $f );
+        remove_filter( 'get_search_form', $g );
         add_filter('get_search_form', array('HeadwayWidgets', 'search_form'), 10);
     }
 }
