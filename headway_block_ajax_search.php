@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: AJAX search
+ * Plugin Name: AJAX search block
  * Plugin URI:  http://theaveragedev.com
  * Description: AJAX-powered Headway themes search block.
  * Version:     0.1.0
