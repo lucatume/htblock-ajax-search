@@ -193,7 +193,30 @@ namespace ajaxsearch;
                 'label' => 'HTML5 search form',
                 'default' => 'true',
                 'tooltip' => 'Output built-in HTML5 search form in place of standard HTML4 output',
-                )
+                ),
+            'labels-title' => array(
+                'type' => 'heading',
+                'name' => 'labels-title',
+                'label' => 'Search form default labels'
+                ),
+            'label_text' => array(
+                'type' => 'text',
+                'name' => 'label_text',
+                'label' => 'Label text',
+                'default' => 'Search for:'
+                ),
+            'placeholder_text' => array(
+                'type' => 'text',
+                'name' => 'placeholder_text',
+                'label' => 'Placeholder text',
+                'default' => 'Type here...'
+                ),
+            'submit_text' => array(
+                'type' => 'text',
+                'name' => 'submit_text',
+                'label' => 'Submit button text',
+                'default' => 'Search'
+                ),
             )
 );
     }
