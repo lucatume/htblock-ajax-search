@@ -26,6 +26,10 @@ class Block extends \HeadwayBlockAPI {
 
     public static function enqueue_action($block_id, $block, $original_block = null)
     {
+        $settings = new Settings($block);
+        if (!$settings->activateAjax) {
+            return;
+        }
         $handle = 'ajaxSearch';
         $src = Script::suffix(AJAXSEARCH_BLOCK_URL . 'assets/js/ajax_search.js');
         $deps = array('jquery-ajaxifySubmit');
@@ -35,7 +39,6 @@ class Block extends \HeadwayBlockAPI {
             $block = $original_block;
         }
         // print the options object to the page
-        $settings = new Settings($block);
         if (!$settings->data) {
             return;
         }
