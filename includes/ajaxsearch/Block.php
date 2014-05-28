@@ -91,13 +91,13 @@ class Block extends \HeadwayBlockAPI {
         $g = function($form) use($settings){
             $html = SimpleHtmlDom::on($form);
             if ($settings->labelText) {
-                $var = $html->find('label', 0)->innertext = $settings->labelText;
+                $var = $html->find('label', 0)->innertext = htmlentities($settings->labelText);
             }
             if ($settings->placeholderText) {
-                $var = $html->find('input[type="text"]', 0)->placeholder = $settings->placeholderText;
+                $var = $html->find('input[type="text"]', 0)->placeholder = htmlentities($settings->placeholderText);
             }
             if ($settings->submitText) {
-                $var = $html->find('input[type="submit"]', 0)->value = $settings->submitText;
+                $var = $html->find('input[type="submit"]', 0)->value = htmlentities($settings->submitText);
             }
             return $html->save();
         };
